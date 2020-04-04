@@ -18,16 +18,55 @@ def delay(req):
     time.sleep(timed)
     return True
 
-def bye(req):
+def bye(req, usr):
+    if usr != "root":
+        printf("Process 'System' cannot be terminated by a normal user.")
+        printf("Please switch to root.")
+        return False
+    else:
+        pass
     printf("Shutting down...")
     delay(req)
     sys.exit(0)
 
-def reboot(req):
+def reboot(req, usr):
+    if usr != "root":
+        printf("Process 'System' cannot be terminated by a normal user.")
+        printf("Please switch to root.")
+        return False
+    else:
+        pass
     printf("Rebooting...")
     delay(req)
     os.system("main.py")
     sys.exit(0)
+
+def jsonf(locat, opt, txt):
+    if opt == "read":
+        o = 'r'
+    elif opt == "ovwrite":
+        o = 'w'
+    elif opt == "write":
+        o = 'a'
+    else:
+        return False
+    
+    if o == 'r':
+        with open(locat, 'r') as fp:
+            ret = json.load(fp)
+        return ret
+    elif o == 'w':
+        with open(locat, 'w') as fp:
+            json.dump(txt, fp)
+        return True
+    elif o == 'a':
+        with open(locat, 'a') as fp:
+            json.dump(txt, fp)
+        return True
+    else:
+        return False
+    printf("Process ended with True")
+
 
 def files(locat, opt, txt):
     if opt == "read":
@@ -55,6 +94,10 @@ def files(locat, opt, txt):
         return False
     printf("Process ended with True")
 
+def termprepare(req):
+    files("proc/username", "ovwrite", req)
+    return True
+
 def tty():
     data = datetime.datetime.now()
     yar = data.year
@@ -67,15 +110,32 @@ def tty():
     printf("ORSH 1.0.0 login on tty " + dat)
     usr = input("\nUsername: ")
     psk = input("\nPassword: ")
-    with open("etc/auth/tty.sam",  'r') as fp:
-        d = fp.read()
-    que = usr + " " + psk
-    if que != d:
-        printf("Access Denied.")
-        a = False
-    else:
-        a = True
+    sam = jsonf("etc/auth/tty.sam", "read", "")
+    for cu in sam.keys():
+        if usr != cu:
+            f = False
+            pass
+        else:
+            f = True
+            break
     
+    for cp in sam.values():
+        if psk != cp:
+            f = False
+            pass
+        else:
+            f = True
+            break
+
+    if f == True:
+        printf("Correct credential.")
+        printf("Preparing terminal...")
+        termprepare(usr)
+        return True
+    else:
+        printf("The credential you gave is invalid.")
+        return False
+
     if a != True:
         printf("Illegal login! Shutting down...")
         time.sleep(2)
@@ -85,10 +145,11 @@ def tty():
         return True
 
 def passwd(req):
+    printf("You are " + req)
     opsk = input("Old password: ")
-    f = files("etc/auth/tty.sam", "read", "")
-    qy = req + " " + opsk
-    if qy != f:
+    f = jsonf("etc/auth/tty.sam", "read", "")
+    u = f[req]
+    if opsk != u:
         printf("Old password wrong! Please try to remember that.")
         return False
     else:
@@ -101,8 +162,8 @@ def passwd(req):
     else:
         pass
     printf("Nothing there buds.")
-    qys = req + " " + npsk
-    files("etc/auth/tty.sam", "ovwrite", qys)
+    f[req] = npsk
+    jsonf("etc/auth/tty.sam", "ovwrite", f)
     printf("Done!")
     printf("Now user: " + req + "'s password changed from " + opsk + " to " + npsk + ".")
     return True
@@ -146,3 +207,74 @@ def wbrows():
             printf("Saved to /tmp/get.txt")
             files("tmp/get.json", "write", obj)
     return True
+
+def usrcgr():
+    ousr = input("Old username: ")
+    nusr = input("New username: ")
+    sam = jsonf("etc/auth/tty.sam", "read", "")
+    for username in sam.keys():
+        if ousr == username:
+            printf("Executing..")
+            f = True
+            break
+        else:
+            f = False
+            pass
+    if f != True:
+        printf("Old user don't exist.")
+        return False
+    else:
+        pass
+    
+    printf("Changing " + ousr + " to " + nusr)
+    usrpsk = sam[ousr]
+    del sam[ousr]
+    sam[nusr] = usrpsk
+    jsonf("etc/auth/tty.sam", "ovwrite", sam)
+    printf("Done!")
+    return True
+
+def switchusr(c):
+    t = input("You want to switch to: ")
+    sam = jsonf("etc/auth/tty.sam", "read", "")
+    p = input(t + "'s password: ")
+    for key in sam.keys():
+        if t == key:
+            y = True
+            break
+        else:
+            y = False
+            pass
+    if y == False:
+        printf("The user '" + t + "' doesn't exist.")
+        return False
+    else:
+        pass
+
+    for value in sam.values():
+        if p == value:
+            y = True
+            break
+        else:
+            y = False
+            pass
+    if y == False:
+        printf("Access denied")
+        return False
+    else:
+        printf("Access Granted.")
+        pass
+
+    files("proc/username", "ovwrite", t)
+    printf("Switched to user " + t)
+    return True
+
+def sudo(pwd):
+    sam = jsonf("etc/auth/tty.sam", "read", "")
+    p = sam["root"]
+    if pwd == p:
+        printf("sudo mode activated instantly.")
+        return True
+    else:
+        printf("Permission denied.")
+        return False
