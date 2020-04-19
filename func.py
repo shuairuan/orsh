@@ -434,3 +434,24 @@ def urlshortener():
         printf("\n\n\n")
         printf(surl)
         return True
+
+def ch(usr):
+    if usr != "root":
+        printf("Hostname Change cannot be executed by a normal user.")
+        printf("Please switch to root or run as sudo.")
+        return False
+    else:
+        pass
+    nh = input("New hostname: ")
+    h = files("etc/whoami", "read", "")
+    if nh == h:
+        printf("Same hostname!")
+        return False
+    else:
+        pass
+    printf("Changing hostname..")
+    files("etc/whoami", "ovwrite", nh)
+    printf("Applying Changes..")
+    printf("Reboot the system to apply changes!")
+    return True
+    

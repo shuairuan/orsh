@@ -15,7 +15,6 @@ else:
     sys.exit(0)
 
 hostname = lib.files("etc/whoami", "read", "")
-username = lib.files("proc/username", "read", "")
 while True:
     sudo = False
     username = lib.files("proc/username", "read", "")
@@ -117,6 +116,15 @@ while True:
     elif cmd == "surl":
         lib.printf("Loading..")
         status = lib.urlshortener()
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
+
+    elif cmd == "chost":
+        lib.printf("Loading...")
+        status = lib.ch(username)
         if status != True:
             lib.printf("Something went wrong.")
             lib.printf("Operation cancelled.")

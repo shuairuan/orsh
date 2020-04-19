@@ -26,6 +26,8 @@ userdel: Delete a user permanently without a backup.
 
 surl: URL Shortener.
 
+chost: Change hostname.
+
 sudo : Sudo mode. e.g. sudo passwd  (Change root's password)
 
 # Cautions
@@ -37,6 +39,11 @@ sudo : Sudo mode. e.g. sudo passwd  (Change root's password)
 
 # Versions:
 2020/4/3 12:39 0.0.1 alpha
+
 2020/4/4 14:26 0.0.2 alpha
+
 2020/4/19 11:31 0.0.3 alpha
+
 2020/4/19 12:31 0.1.0 alpha
+
+2020/4/19 12:42 0.1.1 alpha
