@@ -128,18 +128,31 @@ def tty():
         else:
             f = True
             break
-    
+    if f == False:
+        printf("User not exist!")
+        return False
+    else:
+        pass
+
     for cp in sam.values():
         if psk != cp:
             f = False
             pass
         else:
             f = True
+            if cp == '':
+                wp = True
+            else:
+                wp = False
             break
 
     if f == True:
         printf("Correct credential.")
         printf("Preparing terminal...")
+        if wp == True:
+            printf("Weak password detected! Please change your password immediately!")
+        else:
+            pass
         termprepare(usr)
         return True
     else:
@@ -291,3 +304,133 @@ def sudo(pwd):
 def gtime():
     printf(gettime())
     return True
+
+def cusr(usr): 
+    if usr != "root":
+        printf("User Creation cannot be executed by a normal user.")
+        printf("Please switch to root or run as sudo.")
+        return False
+    else:
+        pass
+
+    un = input("Username: ") 
+    f = jsonf("etc/auth/tty.sam", "read", "")
+    for eu in f.keys():
+        if un == eu:
+            printf("User Exists!")
+            return False
+        else:
+            pass
+
+    printf("Creating..")
+    ps = input("Password for " + un + ": ")
+    if ps == '':
+        printf("You did't set a password, it's very danger, and it means everyone can login to your account. You should change your password when next login!")
+    else:
+        pass
+    f[un] = ps
+    jsonf("etc/auth/tty.sam", "ovwrite", f)
+    return True
+
+def dusr(usr):
+    if usr != "root":
+        printf("User Deletion cannot be executed by a normal user.")
+        printf("Please switch to root or run as sudo.")
+        return False
+    else:
+        pass
+
+    printf("You are entering destroy mode.")
+    printf("You should make sure you know what are you doing right now.")
+    un = input("Username: ")
+    f = jsonf("etc/auth/tty.sam", "read", "")
+    for eu in f.keys():
+        if un != eu:
+            fo = False
+        else:
+            fo = True
+            break
+
+    if fo != True:
+        printf("User not exist!")
+        return False
+    else:
+        pass
+
+    cfm = input("You will delete user " + un + " permanently and unrecoverable! We will delete all data associated to this user! Type he/she's username to confirm: ")
+    if cfm == un:
+        pass
+    else:
+        printf("Operation timeout.")
+        return False
+   
+    del f[un]
+    jsonf("etc/auth/tty.sam", "ovwrite", f)
+    printf("User " + un + " has been terminated and deleted from this system. You never find him/her until you create again!")
+    return True
+
+def cacheclean():
+    with open("proc/username", 'w') as cc:
+        cc.write("")
+
+def urlshortener():
+    try:    
+        import requests
+    except ImportError:
+        printf("Libraries missing.")
+        return False
+    def apikey():
+        ret = "5e8aee8d3a005a1e3878b6ee@fe8c3b9881b4143b171c7d2531d756d9"
+        return ret
+
+    def save(raw, surl):
+        n = datetime.datetime.now()
+        y = n.year
+        m = n.month
+        d = n.day
+        h = n.hour
+        mi = n.minute
+        s = n.second
+        da = "-"
+        string = str(y)+da+str(m)+da+str(d)+da+str(h)+da+str(mi)+da+str(s)+" "+str(raw)+" -> "+str(surl)
+        string = str(string)
+        with open("history.txt", 'a') as f:
+            f.write(string)
+            f.write("\n")
+
+    print("URL Shortener customize for ORSH(TM)")
+    print("We used suo.im's api!")
+
+    while True:
+        raw = input("URL(Enter 'q' to quit): ")
+        if raw == "q":
+            return True
+        print("Running quietly..")
+        sapikey = "5e8aee8d3a005a1e3878b6ee@fe8c3b9881b4143b171c7d2531d756d9"
+            # if "http" in url:
+            #     pass
+            # else:
+            #     print("The URL must include http:// or https://")
+            #     return False
+        address = "http://suo.im/api.htm?url=" + raw + "&key=" + sapikey + "&format=json&expireDate=2099-12-31"
+        req = requests.get(address)
+        res = req.json()
+        err = res['err']
+        surl = res['url']
+        if err == '':
+            pass
+        else:
+            print("Something went wrong...")
+            print(err)
+            continue
+        if surl == raw:
+            print("Shorten failed.")
+            print("Check your URL exist or this URL didn't supported.")
+            continue
+        else:
+            pass
+
+        printf("Shorten successful!")
+        printf("\n\n\n")
+        printf(surl)
+        return True

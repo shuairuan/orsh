@@ -4,6 +4,8 @@ import json
 import time
 import sys
 
+lib.cacheclean()
+
 status = lib.tty()
 if status == True:
     pass
@@ -37,7 +39,11 @@ while True:
             lib.printf("\nYou are currently running at normal user mode.")
             pass
         sp = cmd.split()
-        cmd = sp[1]
+        try:
+            cmd = sp[1]
+        except IndexError:
+            lib.printf("sudo: empty argument.")
+            continue
     lib.files("proc/.ohsh_history", "write", cmd)
     if cmd == "shutdown":
         lib.bye(2, username)
@@ -86,6 +92,31 @@ while True:
     elif cmd == "time":
         lib.printf("Loading..")
         status = lib.gtime()
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
+    elif cmd == "useradd":
+        lib.printf("Loading..")
+        status = lib.cusr(username)
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
+    elif cmd == "userdel":
+        lib.printf("Loading..")
+        status = lib.dusr(username)
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
+
+    elif cmd == "surl":
+        lib.printf("Loading..")
+        status = lib.urlshortener()
         if status != True:
             lib.printf("Something went wrong.")
             lib.printf("Operation cancelled.")
