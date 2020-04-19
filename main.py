@@ -83,7 +83,16 @@ while True:
             lib.printf("Operation cancelled.")
         else:
             lib.printf("Operation Executed.")
-    
+    elif cmd == "time":
+        lib.printf("Loading..")
+        status = lib.gtime()
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
+    else:
+        lib.printf("orsh: command not found.")
 
     if status == True:
         lib.files("proc/.ohsh_history", "write", ": Successful.")

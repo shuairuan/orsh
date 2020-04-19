@@ -67,6 +67,16 @@ def jsonf(locat, opt, txt):
         return False
     printf("Process ended with True")
 
+def gettime():
+    data = datetime.datetime.now()
+    yar = data.year
+    mon = data.month
+    day = data.day
+    hrs = data.hour
+    miu = data.minute
+    sec = data.second
+    dat = str(yar) + "-" + str(mon) + "-" + str(day) + " " + str(hrs) + ":" + str(miu) + ":" + str(sec)
+    return dat
 
 def files(locat, opt, txt):
     if opt == "read":
@@ -184,7 +194,6 @@ def wbrows():
         return False
     else:
         pass
-    
     json = input("Is this a json file?(yes/no):  ")
     if json == "yes":
         printf("Loading..")
@@ -278,3 +287,7 @@ def sudo(pwd):
     else:
         printf("Permission denied.")
         return False
+
+def gtime():
+    printf(gettime())
+    return True
