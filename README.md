@@ -28,6 +28,8 @@ surl: URL Shortener.
 
 chost: Change hostname.
 
+morse: Morse Encrypt/Decrypt.
+
 sudo : Sudo mode. e.g. sudo passwd  (Change root's password)
 
 # Cautions
@@ -47,3 +49,5 @@ sudo : Sudo mode. e.g. sudo passwd  (Change root's password)
 2020/4/19 12:31 0.1.0 alpha
 
 2020/4/19 12:42 0.1.1 alpha
+
+2020/4/24 19:50 0.2.0 alpha

@@ -455,3 +455,64 @@ def ch(usr):
     printf("Reboot the system to apply changes!")
     return True
     
+def libmorse_e():
+    printf("Type the raw text(All lowercase will be turned to uppercase.Please not using any symbols.):")
+    rawtext = input("")
+    printf("\n\n\nEncrypting...")
+    db = jsonf("etc/morse/dat.json", "read", "")
+    prc = rawtext.upper()
+    stage_1 = prc.split()
+    stg1_length = len(stage_1)
+    if stg1_length <= 1:
+        st = True
+    else:
+        st = False
+    files("proc/morse_code.tmp", "ovwrite", "")
+    if st == True:
+        stage_2 = stage_1[0]
+        stage_3 = stage_2[:]
+        for stage_4 in stage_3:
+            cur = db[stage_4]
+            files("proc/morse_code.tmp", "write", cur)
+            files("proc/morse_code.tmp", "write", "/")
+        
+        printf(files("proc/morse_code.tmp", "read", ""))
+        return True
+    elif st == False:
+        for stage_2 in stage_1:
+            current = 0
+            while True:
+                global stg2_length
+                stg2_length = len(stage_2)
+                # printf(stg2_length)
+                # printf(current)
+                if current >= stg2_length:
+                    break
+                cur = db[stage_2[current]]
+                files("proc/morse_code.tmp", "write", cur)
+                files("proc/morse_code.tmp", "write", "/")
+                current = current + 1
+        printf(files("proc/morse_code.tmp", "read", ""))
+        return True
+
+def libmorse_d():
+    db = jsonf("etc/morse/dat.json", "read", "")
+    for k, v in db.items():
+        s = str(k) +  "   " + str(v)
+        printf(s)
+    printf("Please follow these list to decrypt your code.")
+    return True
+    
+
+def morse():
+    printf("International Morse Code")
+    printf("What do you want to do?")
+    printf("1. Encrypt")
+    printf("2. Decrypt")
+    o = input("> ")
+    if o == '1':
+        libmorse_e()
+    elif o == '2':
+        libmorse_d()
+    else:
+        return False

@@ -130,6 +130,14 @@ while True:
             lib.printf("Operation cancelled.")
         else:
             lib.printf("Operation Executed.")
+    elif cmd == "morse":
+        lib.printf("Loading...")
+        status = lib.morse()
+        if status != True:
+            lib.printf("Something went wrong.")
+            lib.printf("Operation cancelled.")
+        else:
+            lib.printf("Operation Executed.")
     else:
         lib.printf("orsh: command not found.")
 
