@@ -1,0 +1,18 @@
+<XML>
+
+<var='int' name='len' v='3'>
+<manual>
+<str>
+    LEN[1]: severity{
+        mild(recoverable);moderate(need user operation);critical(cannot recovery, need reboot);eternity(crashed forever);
+    }
+    LEN[2]: recommended operation{
+        shutdown;reinstall;configrenew;refreshsys;pkgupdate;pkgreinst
+    }
+    LEN[3]: report needed{
+        true;false
+    }
+</str>
+</manual>
+
+</XML>

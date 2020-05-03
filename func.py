@@ -458,51 +458,79 @@ def ch(usr):
 def libmorse_e():
     printf("Type the raw text(All lowercase will be turned to uppercase.Please not using any symbols.):")
     rawtext = input("")
-    printf("\n\n\nEncrypting...")
-    db = jsonf("etc/morse/dat.json", "read", "")
-    prc = rawtext.upper()
-    stage_1 = prc.split()
-    stg1_length = len(stage_1)
-    if stg1_length <= 1:
-        st = True
-    else:
-        st = False
-    files("proc/morse_code.tmp", "ovwrite", "")
-    if st == True:
-        stage_2 = stage_1[0]
-        stage_3 = stage_2[:]
-        for stage_4 in stage_3:
-            cur = db[stage_4]
-            files("proc/morse_code.tmp", "write", cur)
-            files("proc/morse_code.tmp", "write", "/")
-        
-        printf(files("proc/morse_code.tmp", "read", ""))
-        return True
-    elif st == False:
-        for stage_2 in stage_1:
-            current = 0
-            while True:
-                global stg2_length
-                stg2_length = len(stage_2)
-                # printf(stg2_length)
-                # printf(current)
-                if current >= stg2_length:
-                    break
-                cur = db[stage_2[current]]
+    try:
+        printf("\n\n\nEncrypting...")
+        db = jsonf("etc/morse/dat.json", "read", "")
+        prc = rawtext.upper()
+        stage_1 = prc.split()
+        stg1_length = len(stage_1)
+        if stg1_length <= 1:
+            st = True
+        else:
+            st = False
+        files("proc/morse_code.tmp", "ovwrite", "")
+        if st == True:
+            stage_2 = stage_1[0]
+            stage_3 = stage_2[:]
+            for stage_4 in stage_3:
+                cur = db[stage_4]
                 files("proc/morse_code.tmp", "write", cur)
                 files("proc/morse_code.tmp", "write", "/")
-                current = current + 1
-        printf(files("proc/morse_code.tmp", "read", ""))
-        return True
+            
+            printf(files("proc/morse_code.tmp", "read", ""))
+            return True
+        elif st == False:
+            for stage_2 in stage_1:
+                current = 0
+                while True:
+                    global stg2_length
+                    stg2_length = len(stage_2)
+                    # printf(stg2_length)
+                    # printf(current)
+                    if current >= stg2_length:
+                        break
+                    cur = db[stage_2[current]]
+                    files("proc/morse_code.tmp", "write", cur)
+                    files("proc/morse_code.tmp", "write", "/")
+                    current = current + 1
+                    printf(files("proc/morse_code.tmp", "read", ""))
+    except KeyError:
+        printf("I said don't use any symbols. Idiot!")
+        return False
+    return True
 
 def libmorse_d():
-    db = jsonf("etc/morse/dat.json", "read", "")
-    for k, v in db.items():
-        s = str(k) +  "   " + str(v)
-        printf(s)
-    printf("Please follow these list to decrypt your code.")
-    return True
+    files("proc/morse_code.tmp", "ovwrite", "")
+    dic = jsonf("etc/morse/dat.json", "read", "")
+    printf("Type the encrypted string(such as ./../..-../.): ")
+    rawtext = input("")
+    printf("Decrypting...")
+    s1 = rawtext.split()
+    s2 = s1[0]
+    length = len(s2)
+    length = length - 1
+    global c
+    ss3 = ''
+    c = 0
+    while True:
+        if c > length:
+            break
+        s3 = s2[c]
+        if s3 == '/':
+            c =  c + 1
+            try:
+                plain = list (dic.keys()) [list (dic.values()).index (ss3)]
+            except KeyError:
+                printf("Are you sure your code is correct?")
+                return False
+            files("proc/morse_code.tmp", "write", plain)
+            ss3 = ''
+            continue
+        ss3 += s3
+        c = c + 1
     
+    print(files("proc/morse_code.tmp", "read", ""))
+    return True
 
 def morse():
     printf("International Morse Code")
@@ -516,3 +544,48 @@ def morse():
         libmorse_d()
     else:
         return False
+
+def dictionary():
+    print("Dict create")
+    n = 1
+    na = input("Name: ")
+    di = {}
+    while True:
+        printf("Enter 'goodbye' in key to exit and save.")
+        k = input("Key: ")
+        if k == 'goodbye':
+            printf("Byebye!")
+            break
+        v = input("Value: ")
+        kv = "Key: " + str(k) + " Value: " + str(v)
+        printf(kv)
+        di[k] = v
+        ok = "Created. Number: " + str(n)
+        printf(ok)
+        printf("\n")
+        n = n + 1
+
+    kc = "Key count: " + str(n)
+    printf(kc)
+    printf("Saving...")
+    fn = "dat/" + na + ".json"
+    with open(fn, 'w') as j:
+        json.dump(di, j)
+
+    printf("\n\n\nWrote.")
+    printf("Waiting for file..")
+    time.sleep(1)
+    printf("\n\n")
+    printf("Dictionary: \n\n")
+    for key, value in di.items():
+        stri = str(key) + "   "  + str(value)
+        printf(stri)
+
+    printf("\n")
+    printf("File: " + fn)
+
+    printf("\n\n\n")
+    printf("Press any key.")
+    q = input("")
+    return True
+
