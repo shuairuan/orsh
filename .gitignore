@@ -4,3 +4,4 @@ tfunc.py
 proc/.ohsh_history
 proc/username
 proc/morse_code.tmp
+etc/auth/tty.sam

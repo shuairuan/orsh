@@ -540,8 +540,10 @@ def morse():
     o = input("> ")
     if o == '1':
         libmorse_e()
+        return True
     elif o == '2':
         libmorse_d()
+        return True
     else:
         return False
 
