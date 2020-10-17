@@ -1,4 +1,5 @@
 # Introduce
+INTRODUCING, ORWTMC INCORPORATED, FIRST LARGE PROJECT -------ORSH.
 This is a 'shell', to simulate a linux terminal
 # Errors
 If you see the Traceback or any unexpected error, please send an email to <a href="mailto:frank_ruan@outlook.com?subject=ORSH error report">me</a>, and please give me the log files. These thing is in /proc folder. You should send ".ohsh_history" and "log.conf". You can also send a zip file including this entire software.
