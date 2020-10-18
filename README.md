@@ -42,17 +42,3 @@ sudo : Sudo mode. e.g. sudo passwd  (Change root's password)
 
 /etc is system files, if you delete them, the program will crash immediately.
 
-# Versions:
-2020/4/3 12:39 0.0.1 alpha
-
-2020/4/4 14:26 0.0.2 alpha
-
-2020/4/19 11:31 0.0.3 alpha
-
-2020/4/19 12:31 0.1.0 alpha
-
-2020/4/19 12:42 0.1.1 alpha
-
-2020/4/24 19:50 0.2.0 alpha
-
-2020/5/3 13:37  0.3.0 alpha
